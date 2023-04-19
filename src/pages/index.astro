@@ -1,37 +1,40 @@
 ---
+import { getCollection } from 'astro:content';
+
 import Layout from '../layouts/Layout.astro';
 import Card from '../components/Card.astro';
+
+const allJobs = await getCollection('jobs');
 ---
 
-<Layout title="Welcome to Astro.">
+<Layout title="Welcome to Chris Gaeta's portfolio">
 	<main>
-		<h1>Welcome to <span class="text-gradient">Astro</span></h1>
-		<p class="instructions">
-			To get started, open the directory <code>src/pages</code> in your project.<br />
-			<strong>Code Challenge:</strong> Tweak the "Welcome to Astro" message above.
-		</p>
-		<ul role="list" class="link-card-grid">
-			<Card
-				href="https://docs.astro.build/"
-				title="Documentation"
-				body="Learn how Astro works and explore the official API docs."
-			/>
-			<Card
-				href="https://astro.build/integrations/"
-				title="Integrations"
-				body="Supercharge your project with new frameworks and libraries."
-			/>
-			<Card
-				href="https://astro.build/themes/"
-				title="Themes"
-				body="Explore a galaxy of community-built starter themes."
-			/>
-			<Card
-				href="https://astro.build/chat/"
-				title="Community"
-				body="Come say hi to our amazing Discord community. ❤️"
-			/>
+		<h1 class="text-2xl mb-6">Welcome to <br /><span class="text-gradient text-4xl">Chris Gaeta's portfolio</span></h1>
+		<ul role="list" class="mb-4">
+			{allJobs.filter((job) => !job.data.hidden).reverse().map((job) => (
+				<Card title={job.data.employer} body={job.body} start={job.data.start} end={job.data.end}>
+					<h3 class="text-lg leading-loose">Duties</h3>
+					<ul class="px-4 list-disc">
+						{job.data.duties.map((duty) => <li class="text-sm leading-relaxed">{duty}</li>)}
+					</ul>
+					<h3 class="text-lg leading-loose">Contributions</h3>
+					<ul class="px-4 list-disc">
+						{job.data.contribution.map((contribution) => <li class="text-sm leading-relaxed">{contribution}</li>)}
+					</ul>
+					</Card>
+			))}
 		</ul>
+		<Card title="Skills & Buzzwords" body="">
+			<ul class="px-4">
+				<li>HTML, (S)CSS</li>
+				<li>Javascript, Typescript</li>
+				<li>React, Redux, hooks</li>
+				<li>Next.js</li>
+				<li>Webpack, Vite, Parcel</li>
+				<li>Node.js, Rails</li>
+				<li>CI, GitHub Actions</li>
+			</ul>
+		</Card>
 	</main>
 </Layout>
 
@@ -71,11 +74,5 @@ import Card from '../components/Card.astro';
 	}
 	.instructions strong {
 		color: rgb(var(--accent));
-	}
-	.link-card-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-		gap: 1rem;
-		padding: 0;
 	}
 </style>
