@@ -26,7 +26,7 @@ jobs:
         run: npm run build
       - name: Deploy
         run: |
-          cd public
+          cd dist
           git init
           git remote add origin git@github.com:cgaeta/cgaeta.github.io.git
           git fetch origin
