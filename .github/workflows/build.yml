@@ -12,7 +12,7 @@ jobs:
     name: Build
     steps:
       - name: Deploy
-        uses: cgaeta/actions/.github/workflows/build_portfolio.yml
+        uses: cgaeta/actions/.github/workflows/build_portfolio.yml@main
         with:
           repo: astro_portfolio
           build_path: dist
