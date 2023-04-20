@@ -9,3 +9,5 @@ jobs:
       repo: astro_portfolio
       build_path: dist
     secrets: inherit
+permissions:
+  contents: write
