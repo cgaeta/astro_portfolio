@@ -1,15 +1,10 @@
 name: Build
 on:
   workflow_dispatch:
-    inputs:
-      commit:
-        description: "Commit message"
-        required: true
-        default: "Update portfolio"
 jobs:
   deploy:
     name: Deploy
-    uses: cgaeta/actions/.github/workflows/build_portfolio.yml@main
+    uses: cgaeta/actions/.github/workflows/build_portfolio.yml@v1
     with:
       repo: astro_portfolio
       build_path: dist
