@@ -7,12 +7,10 @@ on:
         required: true
         default: "Update portfolio"
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    name: Build
-    steps:
-      - name: Deploy
-        uses: cgaeta/actions/.github/workflows/build_portfolio.yml@main
-        with:
-          repo: astro_portfolio
-          build_path: dist
+  deploy:
+    name: Deploy
+    uses: cgaeta/actions/.github/workflows/build_portfolio.yml@main
+    with:
+      repo: astro_portfolio
+      build_path: dist
+    secrets: inherit
