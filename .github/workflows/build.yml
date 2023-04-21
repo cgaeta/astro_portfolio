@@ -14,13 +14,16 @@ jobs:
       - uses: actions/upload-pages-artifact@v1
         with:
           path: ./dist
+    runs-on: ubuntu-latest
   deploy:
+    needs: build
     steps:
       - id: deployment
         uses: actions/deploy-pages@v2
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
 permissions:
   pages: write
   id-token: write
