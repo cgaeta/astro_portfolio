@@ -1,25 +1,46 @@
 ---
-import { getCollection } from 'astro:content';
+import { z } from 'astro:content';
 
 import Layout from '../layouts/Layout.astro';
 import Card from '../components/Card.astro';
 
-const allJobs = await getCollection('jobs');
+const response = await fetch('https://raw.githubusercontent.com/cgaeta/portfolio_cms/main/jobs.json', { cache: 'no-store' });
+const data = await response.json();
+const jobsSchema = z.array(z.object({
+    employer: z.string(),
+		intro: z.string(),
+    project: z.string(),
+    longName: z.string(),
+    start: z.string(),
+    end: z.string(),
+    location: z.string(),
+    title: z.string(),
+    duties: z.array(z.string()),
+    contribution: z.array(z.string()),
+    links: z.array(
+      z.object({
+        url: z.string(),
+        str: z.string(),
+      })
+    ),
+    hidden: z.boolean().optional(),
+  }));
+const allJobs = jobsSchema.parse(data);
 ---
 
 <Layout title="Welcome to Chris Gaeta's portfolio">
 	<main>
 		<h1 class="text-2xl mb-6">Welcome to <br /><span class="text-gradient text-4xl">Chris Gaeta's portfolio</span></h1>
 		<ul role="list" class="mb-4">
-			{allJobs.filter((job) => !job.data.hidden).reverse().map((job) => (
-				<Card title={job.data.employer} body={job.body} start={job.data.start} end={job.data.end}>
+			{allJobs.filter((job) => !job.hidden).map((job) => (
+				<Card title={job.employer} body={job.intro} start={job.start} end={job.end}>
 					<h3 class="text-lg leading-loose">Duties</h3>
 					<ul class="px-4 list-disc">
-						{job.data.duties.map((duty) => <li class="text-sm leading-relaxed">{duty}</li>)}
+						{job.duties.map((duty) => <li class="text-sm leading-relaxed">{duty}</li>)}
 					</ul>
 					<h3 class="text-lg leading-loose">Contributions</h3>
 					<ul class="px-4 list-disc">
-						{job.data.contribution.map((contribution) => <li class="text-sm leading-relaxed">{contribution}</li>)}
+						{job.contribution.map((contribution) => <li class="text-sm leading-relaxed">{contribution}</li>)}
 					</ul>
 					</Card>
 			))}
